@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # MariaDB Service
+  db:
+    image: mariadb:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+    restart: always
+
+  # WordPress with PHP-FPM Service
+  wordpress:
+    user: "www-data"
+    depends_on:
+      - db
+      - elasticsearch
+      - redis
+    build: .
+    image: wordpress:php8.3-fpm
+    expose: 
+      - "9000"
+    volumes:
+      - ./wordpress:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    restart: always
+
+  # Apache Service
+  apache:
+    depends_on:
+      - wordpress
+    image: bitnami/apache:latest
+    volumes:
+      - ./wordpress:/var/www/html
+      - ./apache-config.conf:/vhosts/my_vhost.conf:ro
+      - ./certs/boston.local.pem:/certs/server.crt
+      - ./certs/boston.local-key.pem:/certs/server.key
+    ports:
+      - "80:8080"
+      - "443:8443"
+    restart: always
+    environment:
+      - BITNAMI_DEBUG=true
+
+  # Elasticsearch Service
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    restart: always
+
+  # Redis Service
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+volumes:
+  db_data: {}
+  es_data: {}
+  redis_data: {}

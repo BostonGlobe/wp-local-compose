@@ -1,6 +1,6 @@
 # Boston.local
 
-This is an all-in-one localhost environment for boston.com. It has ElasticSearch, MariaDB, and Redis installed in their own containers. It will create self signed certificates for the local URL, and install WP-CLI that has access to the WP instance and Maria database containers.
+This is an all-in-one localhost environment for boston.com. It has ElasticSearch, MariaDB, and Redis installed in their own containers. It will create self-signed certificates for the local URL, and install WP-CLI with access to the WP instance and Maria database containers.
 
 ## Getting Started
 
@@ -8,17 +8,16 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 
 * **Node.js**. You need version 12, and also a more up to date version such as 16.
 * **NVM**. This is the easiest way install multiple Node versions, and to switch between versions.
-* **Docker**. Docker is required to build and start the containers. 
-* **Docker-Desktop**. *Optional*. This is a handy GUI that lets you see all your containers and access the containers' log files.
+* **Docker**. Required to build and start the containers. 
+* **Docker-Desktop**. *Optional*. This is a handy GUI that lets you see all your containers, and access the containers' log files.
 
 #### Setup 
 
 1. Clone this repo into your machine.
-2. Create a folder wordpress in the root. This folder will be ignored by this repo.
-3. Start the containers, using `docker-compose up`.
-4. Use the WP-CLI to install the WordPress core into the wordpress folder.
-5. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
-6. Use the WordPress setup script to install the site as *boston.local*. This will distinguish it from localhost sites set up as boston.test, which is the 10updocker convention.
+2. Start the containers, using `docker-compose up`. A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
+3. Use the WP-CLI to install the WordPress core into a folder called wordpress. This folder is ignored by Git. `docker-compose exec wordpress wp core download --path=./wordpress`
+4. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
+5. Use the WP-CLI to create the site as *boston.local*. `docker-compose exec wordpress wp core install`. This will distinguish it from localhost sites set up as boston.test, which is the 10updocker convention.
 
 #### Configure WordPress
 
@@ -59,7 +58,7 @@ To build and watch changes, go into wordpress/wp-content.
 `npm run watch`
 
 
-#### Codesniffer for style consistency
+#### Use Codesniffer for style consistency
 
 1. Install PHP Codesniffer on your machine. This can be done as a Composer global dependency: 
 `composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true`

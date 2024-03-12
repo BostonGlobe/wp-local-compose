@@ -61,20 +61,20 @@ To build and watch changes, go into wordpress/wp-content.
 
 #### Codesniffer for style consistency
 
-Install PHP Codesniffer on your machine. This can be done as a Composer global dependency: 
+1. Install PHP Codesniffer on your machine. This can be done as a Composer global dependency: 
 `composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true`
 
-Confirm that phpcs is available on the command line as `phpcs`. You can add Composer's bin folder to your PATH if it is not availabe.
+2. Confirm that phpcs is available on the command line as `phpcs`. You can add Composer's bin folder to your PATH if it is not availabe.
 
-Also using Composer, install the WordPress coding standard:
+3. Also using Composer, install the WordPress coding standard:
 `composer global require --dev wp-coding-standards/wpcs:"^3.0"`
 
-Then, clone the WordPress-BGMP standard, which is a subset of the WordPress-Core standard:
+4. Then, clone the WordPress-BGMP standard, which is a subset of the WordPress-Core standard:
 https://github.com/BostonGlobe/wp-bgmp-coding-standard.
 
-The WP BGMP standard can be anywhere on your machine. Add the BGMP standard to the phpcs configuration like this:
+5. The WP BGMP standard can be anywhere on your machine. Add the BGMP standard to the phpcs configuration like this:
 `phpcs --config-set installed_paths /path/to/wp-bgmp-coding-standard`
 
-Install a Codesniffer plugin in your code editor. PHP Sniffer by *wongin* works well in VS Code (3/2024). 
+6. Install a Codesniffer plugin in your code editor. PHP Sniffer by *wongin* works well in VS Code (3/2024). 
 
-Now you should be able to set the coding standard in the Codesniffer plugin to **WordPress-BGMP**.
+Now you should be able to set the coding standard in the Codesniffer plugin to **WordPress-BGMP**. 

@@ -1,6 +1,6 @@
 # Boston.local
 
-This is an all-in-one localhost environment for boston.com. It has ElasticSearch, MariaDB, and Redis installed in their own containers.
+This is an all-in-one localhost environment for boston.com. It has ElasticSearch, MariaDB, and Redis installed in their own containers. It will create self signed certificates for the local URL, and install WP-CLI that has access to the WP instance and Maria database containers.
 
 ## Getting Started
 
@@ -8,8 +8,8 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 
 * **Node.js**. You need version 12, and also a more up to date version such as 16.
 * **NVM**. This is the easiest way install multiple Node versions, and to switch between versions.
-* **Docker**. Docker is required to start the containers. 
-* **Docker-Desktop**. *Optional*. This is a handy GUI that lets you see all your containers, and more importantly, access the log files in the containers.
+* **Docker**. Docker is required to build and start the containers. 
+* **Docker-Desktop**. *Optional*. This is a handy GUI that lets you see all your containers and access the containers' log files.
 
 #### Setup 
 
@@ -22,7 +22,7 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 
 #### Configure WordPress
 
-The following additions to the wp-config.php file are recommended:
+The following additions to the wp-config.php file are recommended. These allow the WP instance to use the Docker stack Redis and ElasticSearch containers.
 `define( 'WP_REDIS_HOST', 'redis' );`
 `define( 'WP_ELASTICSEARCH_HOST', 'elasticsearch' );`
 `define( 'WP_ELASTICSEARCH_PORT', '9200' );`

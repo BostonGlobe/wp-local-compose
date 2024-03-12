@@ -11,6 +11,8 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 * **Docker**. Docker is required to start the containers. 
 * **Docker-Desktop**. *Optional*. This is a handy GUI that lets you see all your containers, and more importantly, access the log files in the containers.
 
+#### Setup 
+
 1. Clone this repo into your machine.
 2. Create a folder wordpress in the root. This folder will be ignored by this repo.
 3. Start the containers, using `docker-compose up`.
@@ -18,13 +20,17 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 5. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
 6. Use the WordPress setup script to install the site as *boston.local*. This will distinguish it from localhost sites set up as boston.test, which is the 10updocker convention.
 
-#### Config
+#### Configure WordPress
 
 The following additions to the wp-config.php file are recommended:
-    define( 'WP_REDIS_HOST', 'redis' );
-    define( 'WP_ELASTICSEARCH_HOST', 'elasticsearch' );
-    define( 'WP_ELASTICSEARCH_PORT', '9200' );
-	define( 'WP_DEBUG', true );
+`define( 'WP_REDIS_HOST', 'redis' );`
+`define( 'WP_ELASTICSEARCH_HOST', 'elasticsearch' );`
+`define( 'WP_ELASTICSEARCH_PORT', '9200' );`
+`define( 'WP_DEBUG', true );`
+`define( 'WP_DEBUG_LOG', true );`
+`define( 'WP_DEBUG_DISPLAY', false );`
+`define( 'SCRIPT_DEBUG', true );`
+
 
 #### WP-CLI
 
@@ -46,7 +52,7 @@ Run in the wordpress/wp-content/plugins/bdc-functionality folder:
 `npm install`
 `composer install`
 
-#### Build the CSS and JS files, in watch mode for development
+#### Build CSS and JS files in watch mode
 
 To build and watch changes, go into wordpress/wp-content.
 `nvm use 12`
@@ -72,4 +78,3 @@ The WP BGMP standard can be anywhere on your machine. Add the BGMP standard to t
 Install a Codesniffer plugin in your code editor. PHP Sniffer by *wongin* works well in VS Code (3/2024). 
 
 Now you should be able to set the coding standard in the Codesniffer plugin to **WordPress-BGMP**.
-

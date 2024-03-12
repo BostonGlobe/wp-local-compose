@@ -45,19 +45,23 @@ Now you can go into the folder with the Dockerfile and simply run `docker-wp db 
 #### Install dependencies for the theme and plugin
 
 Run these in the wordpress/wp-content folder:
-`npm install`
-`composer install`
 
-Run in the wordpress/wp-content/plugins/bdc-functionality folder:
-`npm install`
-`composer install`
-
+```
+npm install
+composer install
+```
+Also run in the wordpress/wp-content/plugins/bdc-functionality folder:
+```
+npm install
+composer install
+```
 #### Build CSS and JS files in watch mode
 
 To build and watch changes, go into wordpress/wp-content.
-`nvm use 12`
-`npm run watch`
-
+```
+nvm use 12 // change to Node 12 to run watch.
+npm run watch
+```
 
 #### Use Codesniffer for style consistency
 
@@ -77,4 +81,4 @@ https://github.com/BostonGlobe/wp-bgmp-coding-standard.
 
 6. Install a Codesniffer plugin in your code editor. PHP Sniffer by *wongin* works well in VS Code (3/2024). 
 
-Now you should be able to set the coding standard in the Codesniffer plugin to **WordPress-BGMP**. 
+Now you should be able to set the coding standard in the Codesniffer plugin to "WordPress-BGMP". 

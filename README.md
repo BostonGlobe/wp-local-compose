@@ -21,7 +21,7 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 
 #### Configure WordPress
 
-The following additions to the wp-config.php file are recommended. These allow the WP instance to use the Docker stack Redis and ElasticSearch containers.
+The following additions to the wp-config.php file are recommended. These allow the WP instance to use the Redis and ElasticSearch containers.
 ```
 define( 'WP_REDIS_HOST', 'redis' );
 define( 'WP_ELASTICSEARCH_HOST', 'elasticsearch' );

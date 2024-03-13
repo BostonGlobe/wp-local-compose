@@ -1,4 +1,4 @@
-FROM wordpress:php8.0-fpm
+FROM wordpress:php8.3-fpm
 
 # Install MySQL client
 RUN apt-get update && \

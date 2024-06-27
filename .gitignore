@@ -1,5 +1,4 @@
 wordpress/*
-certs/*
 .vscode/*
 *.sql
 *.sql.gz

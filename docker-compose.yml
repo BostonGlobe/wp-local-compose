@@ -56,10 +56,14 @@ services:
       - wordpress
       - init-certs
     image: bitnami/apache:latest
+    env_file:
+      - local.env
     volumes:
       - ./wordpress:/var/www/html
-      - ./apache-config.conf:/vhosts/my_vhost.conf:ro
+      - ./apache-config.conf:/usr/local/apache2/conf/apache-config.conf  # Updated path
+      - ./startup-script.sh:/usr/local/bin/startup-script.sh
       - ./certs:/certs  # Mount the shared volume where certificates are stored
+    command: ["/usr/local/bin/startup-script.sh"]
     ports:
       - "80:8080"
       - "443:8443"

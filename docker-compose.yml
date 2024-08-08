@@ -25,8 +25,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: username
-      MYSQL_PASSWORD: password
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
     restart: always
 
   # WordPress with PHP-FPM Service
@@ -36,7 +36,9 @@ services:
       - db
       - elasticsearch
       - redis
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.wordpress
     image: wordpress:php8.3-fpm
     expose: 
       - "9000"
@@ -55,15 +57,15 @@ services:
     depends_on:
       - wordpress
       - init-certs
+    build: 
+      context: .
+      dockerfile: Dockerfile.apache
     image: bitnami/apache:latest
     env_file:
       - local.env
     volumes:
       - ./wordpress:/var/www/html
-      - ./apache-config.conf:/usr/local/apache2/conf/apache-config.conf  # Updated path
-      - ./startup-script.sh:/usr/local/bin/startup-script.sh
       - ./certs:/certs  # Mount the shared volume where certificates are stored
-    command: ["/usr/local/bin/startup-script.sh"]
     ports:
       - "80:8080"
       - "443:8443"

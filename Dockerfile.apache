@@ -1,0 +1,22 @@
+FROM bitnami/apache:latest
+
+USER root
+
+RUN mkdir -p /var/lib/apt/lists/partial && \
+    apt-get update && \
+    apt-get install -y gettext && \
+    rm -rf /var/lib/apt/lists/*
+
+USER 1001
+
+# Copy the vhost file to the Apache configuration
+COPY /vhost.conf /vhost.conf
+
+# Copy the environment file
+COPY local.env /local.env
+
+# substitute the env variables in the vhost.conf file
+RUN set -a && . /local.env && envsubst < /vhost.conf > /opt/bitnami/apache/conf/vhosts/000-default.conf
+
+# Include the vhost.conf file in the Apache configuration
+RUN echo "Include /opt/bitnami/apache/conf/vhosts/000-default.conf" >> /opt/bitnami/apache/conf/bitnami/bitnami-apps-vhosts.conf

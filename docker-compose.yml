@@ -31,15 +31,15 @@ services:
 
   # WordPress with PHP-FPM Service
   wordpress:
-    user: "www-data"
+    image: wordpress:php8.3-fpm
     depends_on:
       - db
       - elasticsearch
       - redis
+    user: "www-data"
     build: 
       context: .
       dockerfile: Dockerfile.wordpress
-    image: wordpress:php8.3-fpm
     expose: 
       - "9000"
     volumes:
@@ -54,13 +54,13 @@ services:
 
   # Apache Service
   apache:
+    image: bitnami/apache:latest
     depends_on:
       - wordpress
       - init-certs
     build: 
       context: .
       dockerfile: Dockerfile.apache
-    image: bitnami/apache:latest
     env_file:
       - local.env
     volumes:
@@ -70,8 +70,6 @@ services:
       - "80:8080"
       - "443:8443"
     restart: always
-    environment:
-      - BITNAMI_DEBUG=true
 
   # ElasticSearch Service
   elasticsearch:
@@ -95,16 +93,16 @@ services:
   
   # PhpMyAdmin Service
   phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
     depends_on:
       - db
-    image: phpmyadmin/phpmyadmin:latest
     platform: linux/amd64
     ports:
       - "8080:80"
     environment:
       PMA_HOST: db
-      PMA_USER: username
-      PMA_PASSWORD: password
+      PMA_USER: wordpress
+      PMA_PASSWORD: wordpress
     restart: always
 
 volumes:

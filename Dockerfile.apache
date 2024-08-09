@@ -1,15 +1,18 @@
 FROM bitnami/apache:latest
 
+# Switch to root to install gettext
 USER root
 
+# Install gettext to use envsubst
 RUN mkdir -p /var/lib/apt/lists/partial && \
     apt-get update && \
     apt-get install -y gettext && \
     rm -rf /var/lib/apt/lists/*
 
+# Switch back to the default non-root user
 USER 1001
 
-# Copy the vhost file to the Apache configuration
+# Copy the vhost file to the Apache container
 COPY /vhost.conf /vhost.conf
 
 # Copy the environment file

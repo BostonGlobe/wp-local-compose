@@ -50,11 +50,12 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_TABLE_PREFIX: BGMP_
     restart: always
 
   # Apache Service
   apache:
-    image: bitnami/apache:latest
+    image: bitnami/apache:2.4.62
     depends_on:
       - wordpress
       - init-certs
@@ -93,7 +94,7 @@ services:
   
   # PhpMyAdmin Service
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin:5.2.1
     depends_on:
       - db
     platform: linux/amd64

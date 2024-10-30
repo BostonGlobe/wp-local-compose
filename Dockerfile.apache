@@ -1,4 +1,4 @@
-FROM bitnami/apache:latest
+FROM bitnami/apache:2.4.62
 
 # Switch to root to install gettext
 USER root

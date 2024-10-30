@@ -15,3 +15,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Install Redis extension for PHP.
 # This includes PhpRedis, dependency of Object Cache Pro.
 RUN if ! pecl list | grep -q redis; then pecl install redis && docker-php-ext-enable redis; fi
+
+# Install XSL extension for PHP.
+# Needed for Gabriels listings.
+RUN apt-get update && \
+    apt-get install -y libxslt1-dev && \
+    docker-php-ext-install xsl

@@ -14,10 +14,10 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 #### Setup 
 
 1. Clone this repo into your machine.
-2. Start the containers, using `docker-compose up`. A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
-3. Use the WP-CLI to install the WordPress core into a folder called wordpress. This folder is ignored by Git. `docker-compose exec wordpress wp core download --path=./wordpress`
+2. Start the containers, using `docker compose up` (if you have an older version of Docker you might need `docker-compose`). A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
+3. Add boston.local to your machine's host file. On a Mac, this is at /etc/hosts. You just need this line: `127.0.0.1 boston.local`.
 4. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
-5. Use the WP-CLI to create the site as *boston.local*. `docker-compose exec wordpress wp core install`. This will distinguish it from localhost sites set up as boston.test, which is the 10updocker convention.
+5. Navigate to https://boston.local. Your browser might give you a security error, because it doesn't like the self signed certificate, but proceed as "unsafe". Your should see the WP database setup screen. Go ahead and set it up, as boston.local.
 
 #### Configure WordPress
 
@@ -34,11 +34,11 @@ define( 'SCRIPT_DEBUG', true );
 
 #### WP-CLI
 
-The Docker Compose stack has WP-CLI built in. To execute commands you have to run them inside the container this way: `docker-compose exec wordpress wp db check`. 
+The Docker Compose stack has WP-CLI built in. To execute commands you have to run them inside the container this way: `docker compose exec wordpress wp db check`. 
 
 It is possible to add a shorten the command by adding an alias to your machine. 
 Edit your .zprofile (or .profile or .bash_profile, depending on your terminal set up). 
-Add an alias this way: `alias docker-wp='docker-compose exec wordpress wp'`.
+Add an alias this way: `alias docker-wp='docker compose exec wordpress wp'`.
 
 Now you can go into the folder with the Dockerfile and simply run `docker-wp db check`.
 

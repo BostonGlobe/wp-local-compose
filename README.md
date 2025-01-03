@@ -14,7 +14,7 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 #### Setup 
 
 1. Clone this repo into your machine.
-2. Start the containers, using `docker compose up` (if you have an older version of Docker you might need `docker-compose`). A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
+2. Start the containers, using `podman compose up`. A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
 3. Add boston.local to your machine's host file. On a Mac, this is at /etc/hosts. You just need this line: `127.0.0.1 boston.local`.
 4. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
 5. Navigate to https://boston.local. Your browser might give you a security error, because it doesn't like the self signed certificate, but proceed as "unsafe". Your should see the WP database setup screen. Go ahead and set it up, as boston.local.
@@ -23,7 +23,19 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 
 The following additions to the wp-config.php file are recommended. These allow the WP instance to use the Redis and ElasticSearch containers.
 ```
-define( 'WP_REDIS_HOST', 'redis' );
+define(
+	'WP_REDIS_CONFIG',
+	[
+		'token'        => 'db08856eb1e8a796ec942e5dfd548293a811b60d681d686b2e163aaeca9a',
+		'host'         => 'redis',
+		'port'         => 6379,
+		'database'     => 0,
+		'maxttl'       => 86400 * 7,
+		'timeout'      => 1.0,
+		'read_timeout' => 1.0,
+		'debug'        => false,
+	]
+);
 define( 'WP_ELASTICSEARCH_HOST', 'elasticsearch' );
 define( 'WP_ELASTICSEARCH_PORT', '9200' );
 define( 'WP_DEBUG', true );
@@ -34,13 +46,13 @@ define( 'SCRIPT_DEBUG', true );
 
 #### WP-CLI
 
-The Docker Compose stack has WP-CLI built in. To execute commands you have to run them inside the container this way: `docker compose exec wordpress wp db check`. 
+The Docker Compose stack has WP-CLI built in. To execute commands you have to run them inside the container this way: `podman compose exec wordpress wp db check`. 
 
 It is possible to add a shorten the command by adding an alias to your machine. 
 Edit your .zprofile (or .profile or .bash_profile, depending on your terminal set up). 
-Add an alias this way: `alias docker-wp='docker compose exec wordpress wp'`.
+Add an alias this way: `alias podman-wp='podman compose exec wordpress wp'`.
 
-Now you can go into the folder with the Dockerfile and simply run `docker-wp db check`.
+Now you can go into the folder with the Dockerfilefile and simply run `podman-wp db check`.
 
 #### Install dependencies for the theme and plugin
 

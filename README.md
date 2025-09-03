@@ -8,8 +8,8 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 
 * **Node.js**. You need version 12, and also a more up to date version such as 16.
 * **NVM**. This is the easiest way install multiple Node versions, and to switch between versions.
-* **Docker**. Required to build and start the containers. 
-* **Docker-Desktop**. *Optional*. This is a handy GUI that lets you see all your containers, and access the containers' log files.
+* **Podman**. Required to build and start the containers. 
+* **Podman Desktop**. *Optional*. This is a handy GUI that lets you see all your containers, and access the containers' log files.
 
 #### Setup 
 

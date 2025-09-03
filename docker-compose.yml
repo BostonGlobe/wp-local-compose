@@ -19,7 +19,7 @@ services:
       "
   # MariaDB Service
   db:
-    image: mariadb:latest
+    image: mariadb:11.7.2
     volumes:
       - db_data:/var/lib/mysql
     environment:
@@ -45,12 +45,13 @@ services:
     volumes:
       - ./wordpress:/var/www/html
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_TABLE_PREFIX: BGMP_
+      WORDPRESS_TABLE_PREFIX: wp_
     restart: always
 
   # Apache Service
@@ -67,9 +68,9 @@ services:
     volumes:
       - ./wordpress:/var/www/html
       - ./certs:/certs  # Mount the shared volume where certificates are stored
+      - ./apache.conf:/opt/bitnami/apache/conf/vhosts/wordpress.conf
     ports:
-      - "8080:8080"
-      - "8443:8443"
+      - "8444:8443"
     restart: always
 
   # ElasticSearch Service
@@ -77,34 +78,72 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
     environment:
       - discovery.type=single-node
+      - network.bind_host=0.0.0.0
+      - network.publish_host=elasticsearch
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+      - cluster.name=docker-cluster
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
     volumes:
       - es_data:/usr/share/elasticsearch/data
     ports:
-      - "9200:9200"
+      - "9201:9200"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     restart: always
 
   # Redis Service
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --stop-writes-on-bgsave-error no
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
+    environment:
+      - REDIS_MAXMEMORY=256mb
+      - REDIS_MAXMEMORY_POLICY=allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     restart: always
   
   # PhpMyAdmin Service
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.1
+    image: phpmyadmin/phpmyadmin:latest
     depends_on:
       - db
     platform: linux/amd64
     ports:
-      - "8081:80"
+      - "8082:80"
     environment:
       PMA_HOST: db
       PMA_USER: wordpress
       PMA_PASSWORD: wordpress
     restart: always
+
+  # Ngrok for external access
+  ngrok:
+    image: ngrok/ngrok:3-alpine
+    depends_on:
+      - apache
+    command: http apache:8080 --host-header=boston.local
+    environment:
+      NGROK_AUTHTOKEN: 31yXRrQzMcSrKGgTrWkmMErw04o_2gTgZR1YXnndVDWVz6xim
+    ports:
+      - "4040:4040"  # ngrok web interface
+    restart: unless-stopped
 
 volumes:
   db_data:

@@ -68,7 +68,7 @@ services:
     volumes:
       - ./wordpress:/var/www/html
       - ./certs:/certs  # Mount the shared volume where certificates are stored
-      - ./apache.conf:/opt/bitnami/apache/conf/vhosts/wordpress.conf
+      - ./vhost.conf:/opt/bitnami/apache/conf/vhosts/wordpress.conf
     ports:
       - "8444:8443"
     restart: always
@@ -132,18 +132,6 @@ services:
       PMA_USER: wordpress
       PMA_PASSWORD: wordpress
     restart: always
-
-  # Ngrok for external access
-  ngrok:
-    image: ngrok/ngrok:3-alpine
-    depends_on:
-      - apache
-    command: http apache:8080 --host-header=boston.local
-    environment:
-      NGROK_AUTHTOKEN: 31yXRrQzMcSrKGgTrWkmMErw04o_2gTgZR1YXnndVDWVz6xim
-    ports:
-      - "4040:4040"  # ngrok web interface
-    restart: unless-stopped
 
 volumes:
   db_data:

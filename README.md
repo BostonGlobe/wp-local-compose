@@ -14,10 +14,18 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
 #### Setup 
 
 1. Clone this repo into your machine.
-2. Start the containers, using `podman compose up`. A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
-3. Add boston.local to your machine's host file. On a Mac, this is at /etc/hosts. You just need this line: `127.0.0.1 boston.local`.
-4. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
-5. Navigate to https://boston.local. Your browser might give you a security error, because it doesn't like the self signed certificate, but proceed as "unsafe". Your should see the WP database setup screen. Go ahead and set it up, as boston.local.
+2. **Allow Podman to bind to port 443.** By default, rootless Podman cannot use privileged ports (below 1024). Run the following once to allow it inside the Podman VM:
+   ```
+   podman machine ssh
+   sudo sysctl -w net.ipv4.ip_unprivileged_port_start=443
+   echo 'net.ipv4.ip_unprivileged_port_start=443' | sudo tee -a /etc/sysctl.conf
+   exit
+   ```
+   This persists across VM restarts.
+3. Start the containers, using `podman compose up`. A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
+4. Add boston.local to your machine's host file. On a Mac, this is at /etc/hosts. You just need this line: `127.0.0.1 boston.local`.
+5. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
+6. Navigate to https://boston.local. Your browser might give you a security error, because it doesn't like the self signed certificate, but proceed as "unsafe". Your should see the WP database setup screen. Go ahead and set it up, as boston.local.
 
 #### Configure WordPress
 

@@ -60,15 +60,16 @@ services:
     depends_on:
       - wordpress
       - init-certs
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.apache
+      args:
+        DOMAIN: ${DOMAIN}
     env_file:
-      - local.env
+      - .env
     volumes:
       - ./wordpress:/var/www/html
       - ./certs:/certs  # Mount the shared volume where certificates are stored
-      - ./vhost.conf:/opt/bitnami/apache/conf/vhosts/wordpress.conf
     ports:
       - "443:8443"
     restart: always

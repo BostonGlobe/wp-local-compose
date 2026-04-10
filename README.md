@@ -22,7 +22,7 @@ This is an all-in-one localhost environment for boston.com. It has ElasticSearch
    exit
    ```
    This persists across VM restarts.
-3. Start the containers, using `podman compose up`. A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
+3. Start the containers, using `podman-compose up`. A "certs" folder will be created for the self-signed certificates. This folder is also ignored by Git.
 4. Add boston.local to your machine's host file. On a Mac, this is at /etc/hosts. You just need this line: `127.0.0.1 boston.local`.
 5. Clone the BDC repo (https://github.com/BostonGlobe/wp-theme-bdc2) into the wordpress/wp-content folder, replacing all files.
 6. Navigate to https://boston.local. Your browser might give you a security error, because it doesn't like the self signed certificate, but proceed as "unsafe". Your should see the WP database setup screen. Go ahead and set it up, as boston.local.
@@ -54,11 +54,11 @@ define( 'SCRIPT_DEBUG', true );
 
 #### WP-CLI
 
-The Docker Compose stack has WP-CLI built in. To execute commands you have to run them inside the container this way: `podman compose exec wordpress wp db check`. 
+The Docker Compose stack has WP-CLI built in. To execute commands you have to run them inside the container this way: `podman-compose exec wordpress wp db check`. 
 
 It is possible to add a shorten the command by adding an alias to your machine. 
 Edit your .zprofile (or .profile or .bash_profile, depending on your terminal set up). 
-Add an alias this way: `alias podman-wp='podman compose exec wordpress wp'`.
+Add an alias this way: `alias podman-wp='podman-compose exec wordpress wp'`.
 
 Now you can go into the folder with the Dockerfilefile and simply run `podman-wp db check`.
 

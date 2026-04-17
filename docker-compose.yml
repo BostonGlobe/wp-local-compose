@@ -32,6 +32,7 @@ services:
   # WordPress with PHP-FPM Service
   wordpress:
     image: wordpress:php8.3-fpm
+    container_name: wordpress
     depends_on:
       - db
       - elasticsearch
